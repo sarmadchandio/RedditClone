@@ -1060,6 +1060,7 @@ class MinimalController(BaseController):
     ))
 
     def check_cors(self):
+        print("Check Cors function called")
         origin = request.headers.get("Origin")
         if c.cors_checked or not origin:
             return
@@ -1090,7 +1091,7 @@ class MinimalController(BaseController):
             if cors and cors["origin_check"](origin):
                 response.headers["Access-Control-Allow-Origin"] = origin
                 if cors.get("allow_credentials"):
-                    response.headers["Access-Control-Allow-Credentials"] = "true"
+                    response.headers["Access-Control-Allow-Credentials"] = "false"
         c.cors_checked = True
 
     def OPTIONS(self):

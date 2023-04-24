@@ -234,7 +234,7 @@ def ensure_account(name):
         return account
     except NotFound:
         print ">> registering /u/{}".format(name)
-        return register(name, "password", "127.0.0.1")
+        return register(name, "", "127.0.0.1")
 
 
 def ensure_subreddit(name, author):
@@ -260,6 +260,7 @@ def inject_test_data(num_links=25, num_comments=25, num_votes=5):
     """Flood your reddit install with test data based on reddit.com."""
 
     print ">>>> Ensuring configured objects exist"
+    print ("system user = %s",g.system_user)
     system_user = ensure_account(g.system_user)
     ensure_account(g.automoderator_account)
     ensure_subreddit(g.default_sr, system_user)
@@ -274,16 +275,16 @@ def inject_test_data(num_links=25, num_comments=25, num_votes=5):
     modeler = Modeler()
     subreddits = [
         modeler.model_subreddit("pics"),
-        modeler.model_subreddit("videos"),
-        modeler.model_subreddit("askhistorians"),
+        # modeler.model_subreddit("videos"),
+        # modeler.model_subreddit("askhistorians"),
     ]
     extra_settings = {
         "pics": {
             "show_media": True,
-        },
-        "videos": {
-            "show_media": True,
-        },
+        }
+        # "videos": {
+        #     "show_media": True,
+        # },
     }
 
     print
@@ -301,7 +302,9 @@ def inject_test_data(num_links=25, num_comments=25, num_votes=5):
     things = []
     for sr_model in subreddits:
         sr_author = random.choice(accounts)
+        sr_author = ensure_account("sarmad1")
         sr = ensure_subreddit(sr_model.name, sr_author)
+        # print("subreddit details: {}--{}--{}".format(sr_model.name, sr_author.name, sr_author.Password))
 
         # make the system user subscribed for easier testing
         if sr.add_subscriber(system_user):

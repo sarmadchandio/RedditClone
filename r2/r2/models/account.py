@@ -381,6 +381,7 @@ class Account(Thing):
 
         q._limit = 1
         l = list(q)
+        print('account cache: ', l)
         if l:
             return l[0]._id
 
@@ -388,6 +389,7 @@ class Account(Thing):
     def _by_name(cls, name, allow_deleted = False, _update = False):
         #lower name here so there is only one cache
         uid = cls._by_name_cache(name.lower(), allow_deleted, _update = _update)
+        print("account uid: {}".format(uid))
         if uid:
             return cls._byID(uid, data=True)
         else:
